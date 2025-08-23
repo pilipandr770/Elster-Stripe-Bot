@@ -1,0 +1,5 @@
+{
+  "name": "Elster AI Assistant",
+  "description": "A web application to automate German tax reporting by connecting Stripe income to the ELSTER system. It features a dashboard for monitoring transactions and submissions, and an AI assistant powered by Gemini to answer questions about financial data.",
+  "requestFramePermissions": []
+}
