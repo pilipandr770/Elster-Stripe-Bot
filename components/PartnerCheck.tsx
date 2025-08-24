@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Button from './Button';
 import Input from './Input';
 import { MOCK_USER_PROFILE, MOCK_COUNTERPARTIES } from '../constants';
@@ -158,22 +158,26 @@ const UserProfileForm: React.FC<{ onSave: (profile: UserProfile) => void, onBack
     const [error, setError] = useState<string | null>(null);
 
     // Load user profile on mount
-    useCallback(async () => {
-        try {
-            setIsLoading(true);
-            setError(null);
-            const { getUserProfile } = await import('../services/profileService');
-            const userProfile = await getUserProfile();
-            if (userProfile) {
-                setProfile(userProfile);
+    useEffect(() => {
+        async function loadProfile() {
+            try {
+                setIsLoading(true);
+                setError(null);
+                const { getUserProfile } = await import('../services/profileService');
+                const userProfile = await getUserProfile();
+                if (userProfile) {
+                    setProfile(userProfile);
+                }
+            } catch (err) {
+                console.error("Error loading profile:", err);
+                setError("Fehler beim Laden des Profils. Bitte versuchen Sie es später erneut.");
+            } finally {
+                setIsLoading(false);
             }
-        } catch (err) {
-            console.error("Error loading profile:", err);
-            setError("Fehler beim Laden des Profils. Bitte versuchen Sie es später erneut.");
-        } finally {
-            setIsLoading(false);
         }
-    }, [])();
+        
+        loadProfile();
+    }, []);
 
     const handleChange = (field: keyof UserProfile, value: string) => {
         setProfile(prev => ({ ...prev, [field]: value }));
@@ -214,7 +218,7 @@ const UserProfileForm: React.FC<{ onSave: (profile: UserProfile) => void, onBack
                     <span className="ml-3">Profil wird geladen...</span>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4" role="form">
                     {error && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                             <p>{error}</p>
@@ -230,6 +234,7 @@ const UserProfileForm: React.FC<{ onSave: (profile: UserProfile) => void, onBack
                              type="submit" 
                              className="w-full" 
                              disabled={isSaving}
+                             data-testid="save-profile-button"
                          >
                              {isSaving ? "Profil wird gespeichert..." : "Profil speichern & weiter"}
                          </Button>

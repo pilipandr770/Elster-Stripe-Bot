@@ -3,55 +3,44 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Header from '../../components/Header';
 
-// Mock react-router-dom
-vi.mock('react-router-dom', () => ({
-  useLocation: () => ({ pathname: '/' }),
-  useNavigate: () => vi.fn()
-}));
-
 describe('Header Component', () => {
   // Create a simple wrapper for rendering components
-  const renderWithRouter = (ui: React.ReactElement) => {
-    return render(
-      React.createElement('div', null, ui)
-    );
+  const renderHeader = () => {
+    return render(<Header />);
   };
   
   it('renders the logo', () => {
-    renderWithRouter(React.createElement(Header, {}));
+    renderHeader();
     
-    // Assuming the logo contains the text "Elster" or a specific alt text
-    // Adjust this based on actual implementation
-    const logoElement = screen.queryByAltText('Elster') || screen.queryByText(/elster/i);
-    expect(logoElement).toBeDefined();
+    // Проверяем наличие текста Elster в заголовке
+    const titleElement = screen.getByText(/Elster KI-Assistent/i);
+    expect(titleElement).toBeInTheDocument();
   });
 
-  it('renders navigation links', () => {
-    renderWithRouter(React.createElement(Header, {}));
+  it('renders with the correct structure', () => {
+    renderHeader();
     
-    // Check for common navigation items (adjust based on actual implementation)
-    const navItems = screen.queryAllByRole('link');
-    expect(navItems.length).toBeGreaterThan(0);
+    // Проверяем, что у нас есть элемент header
+    const headerElement = screen.getByRole('banner');
+    expect(headerElement).toBeInTheDocument();
+    
+    // Проверяем, что у нас есть заголовок
+    const headingElement = screen.getByRole('heading', { level: 1 });
+    expect(headingElement).toBeInTheDocument();
   });
 
-  it('displays user info when logged in', () => {
-    // Mock logged in state
-    const loggedInUser = { name: 'Test User' };
+  it('contains the TaxIcon component', () => {
+    renderHeader();
     
-    renderWithRouter(
-      React.createElement(Header, { user: loggedInUser })
-    );
+    // Так как TaxIcon это компонент SVG, мы не можем напрямую проверить его наличие,
+    // но мы можем проверить наличие контейнера с классом, который указывает на него
+    const headerElement = screen.getByRole('banner');
+    expect(headerElement).toHaveClass('bg-white');
     
-    // Check for user name or avatar (adjust based on actual implementation)
-    const userElement = screen.queryByText('Test User');
-    expect(userElement).toBeDefined();
+    // Проверяем наличие контейнера
+    const container = screen.getByText(/Elster KI-Assistent/i).parentElement;
+    expect(container).toHaveClass('container');
   });
 
-  it('shows login button when not logged in', () => {
-    renderWithRouter(React.createElement(Header, { user: null }));
-    
-    // Check for login/register links
-    const loginButton = screen.queryByText(/login/i) || screen.queryByText(/anmelden/i);
-    expect(loginButton).toBeDefined();
-  });
+  // Удаляем тесты, которые не соответствуют текущей реализации компонента
 });

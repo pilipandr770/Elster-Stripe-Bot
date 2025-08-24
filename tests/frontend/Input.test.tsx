@@ -7,7 +7,10 @@ describe('Input Component', () => {
   it('renders correctly with label', () => {
     render(<Input label="Username" name="username" />);
     
-    expect(screen.getByLabelText('Username')).toBeInTheDocument();
+    // Проверяем, что label отображается
+    expect(screen.getByText('Username')).toBeInTheDocument();
+    // Проверяем, что input существует
+    expect(screen.getByRole('textbox', { name: 'Username' })).toBeInTheDocument();
   });
 
   it('handles value changes', () => {
@@ -20,7 +23,8 @@ describe('Input Component', () => {
       onChange={handleChange} 
     />);
     
-    const input = screen.getByLabelText('Email');
+    // Находим input по роли и атрибуту
+    const input = screen.getByRole('textbox', { name: 'Email' });
     fireEvent.change(input, { target: { value: 'test@example.com' } });
     
     expect(handleChange).toHaveBeenCalled();
@@ -32,9 +36,11 @@ describe('Input Component', () => {
         label="Password" 
         name="password" 
         error="Password is required" 
+        type="password"
       />
     );
     
+    // Проверяем, что сообщение об ошибке отображается
     expect(screen.getByText('Password is required')).toBeInTheDocument();
   });
 
@@ -47,7 +53,8 @@ describe('Input Component', () => {
       />
     );
     
-    const inputContainer = screen.getByLabelText('Custom Input').closest('div');
+    // Ищем родительский div
+    const inputContainer = screen.getByText('Custom Input').closest('div');
     expect(inputContainer).toHaveClass('custom-class');
   });
 });

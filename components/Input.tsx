@@ -3,50 +3,60 @@ import React from 'react';
 import { InfoIcon } from './icons/InfoIcon';
 
 interface InputProps {
-  id: string;
+  id?: string;
+  name?: string;
   label: string;
-  type: 'text' | 'date' | 'number' | 'checkbox' | 'password';
-  value: string | boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: 'text' | 'date' | 'number' | 'checkbox' | 'password';
+  value?: string | boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   info?: string;
+  className?: string;
+  error?: string;
 }
 
 const Input: React.FC<InputProps> = ({
   id,
+  name,
   label,
-  type,
-  value,
-  onChange,
+  type = 'text',
+  value = '',
+  onChange = () => {},
   placeholder,
-  info
+  info,
+  className = '',
+  error
 }) => {
+  // Используем id или name в качестве идентификатора
+  const inputId = id || name || label.toLowerCase().replace(/\s+/g, '-');
   if (type === 'checkbox') {
     return (
-      <div className="relative flex items-start">
+      <div className={`relative flex items-start ${className}`}>
         <div className="flex h-6 items-center">
           <input
-            id={id}
-            name={id}
+            id={inputId}
+            name={name || inputId}
             type="checkbox"
             checked={!!value}
             onChange={onChange}
             className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            aria-label={label}
           />
         </div>
         <div className="ml-3 text-sm leading-6">
-          <label htmlFor={id} className="font-medium text-gray-900">
+          <label htmlFor={inputId} className="font-medium text-gray-900">
             {label}
           </label>
           {info && <p className="text-gray-500">{info}</p>}
+          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <label htmlFor={id} className="flex items-center text-sm font-medium text-gray-700">
+    <div className={className}>
+      <label htmlFor={inputId} className="flex items-center text-sm font-medium text-gray-700">
         {label}
         {info && (
           <div className="group relative ml-2">
@@ -60,14 +70,16 @@ const Input: React.FC<InputProps> = ({
       <div className="mt-1">
         <input
           type={type}
-          name={id}
-          id={id}
+          name={name || inputId}
+          id={inputId}
           value={value as string}
           onChange={onChange}
           placeholder={placeholder}
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm text-slate-900"
+          aria-label={label}
         />
       </div>
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
     </div>
   );
 };

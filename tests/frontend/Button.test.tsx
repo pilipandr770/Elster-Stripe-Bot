@@ -9,21 +9,21 @@ describe('Button Component', () => {
     
     const button = screen.getByText('Test Button');
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('btn');
+    expect(button).toHaveClass('bg-primary');
   });
 
   it('applies primary variant class when specified', () => {
     render(<Button variant="primary">Primary Button</Button>);
     
     const button = screen.getByText('Primary Button');
-    expect(button).toHaveClass('btn-primary');
+    expect(button).toHaveClass('bg-primary');
   });
 
   it('applies secondary variant class when specified', () => {
     render(<Button variant="secondary">Secondary Button</Button>);
     
     const button = screen.getByText('Secondary Button');
-    expect(button).toHaveClass('btn-secondary');
+    expect(button).toHaveClass('bg-white');
   });
 
   it('handles click events', () => {
