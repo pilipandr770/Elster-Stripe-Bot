@@ -25,6 +25,10 @@ See architectural spec in `AGENT.md`.
 ## ⚠️ Disclaimer
 No legal, tax, or financial advice is provided. The system only summarizes recorded data. Guardrails described in `AGENT.md` must be enforced server‑side before production.
 
+## 🧪 Testing
+
+This project includes a comprehensive test suite for frontend, backend, and integration testing. See [TESTING.md](TESTING.md) for details on running tests and the testing infrastructure.
+
 ## 🚀 Getting Started (Frontend Prototype)
 
 ### Prerequisites
