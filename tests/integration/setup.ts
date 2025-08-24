@@ -2,9 +2,6 @@ import '@testing-library/jest-dom';
 import { expect, afterEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 
-// В новых версиях @testing-library/jest-dom матчеры добавляются автоматически
-// с помощью импорта '@testing-library/jest-dom'
-
 // Запускаем cleanup после каждого теста
 afterEach(() => {
   cleanup();
