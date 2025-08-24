@@ -9,6 +9,7 @@ import { HeadsetIcon } from './icons/HeadsetIcon';
 import { InfoIcon } from './icons/InfoIcon';
 import { getConfig, saveConfig, uploadKnowledgeFile, testChannelConnection } from '../services/secretaryService';
 import { MOCK_SECRETARY_CONFIG } from '../constants'; // Fallback
+import GoogleCalendarSettings from './GoogleCalendarSettings';
 
 interface SecretaryProps {
   onBack: () => void;
@@ -132,7 +133,7 @@ const Secretary: React.FC<SecretaryProps> = ({ onBack }) => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        {/* Left Column: Channels & Knowledge Base */}
+        {/* Left Column: Channels, Calendar & Knowledge Base */}
         <div className="space-y-8">
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="font-bold text-lg text-gray-800 mb-4">Kommunikationskanäle</h3>
@@ -167,6 +168,18 @@ const Secretary: React.FC<SecretaryProps> = ({ onBack }) => {
                     ))}
                 </div>
             </div>
+
+            {/* Google Calendar Settings */}
+            <GoogleCalendarSettings 
+                initialConfig={config.googleCalendar} 
+                onConfigChange={(calendarConfig) => {
+                    setConfig(prev => prev ? {
+                        ...prev,
+                        googleCalendar: calendarConfig
+                    } : null);
+                }} 
+            />
+
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="font-bold text-lg text-gray-800 mb-2">Wissensdatenbank (Gehirn des Assistenten)</h3>
                 <p className="text-sm text-gray-600 mb-4">Laden Sie Dateien hoch (PDFs, DOCs), damit der Assistent genaue Antworten geben kann.</p>
@@ -193,8 +206,14 @@ const Secretary: React.FC<SecretaryProps> = ({ onBack }) => {
             <h3 className="font-bold text-lg text-gray-800 mb-2">Benutzerdefinierte Anweisungen</h3>
             <p className="text-sm text-gray-600 mb-4">Geben Sie dem Assistenten klare Regeln und Informationen. Definieren Sie den Kommunikationsstil, wichtige Fakten (Adresse, Öffnungszeiten) oder spezielle Angebote.</p>
             <textarea
-                value={config.customInstructions}
-                onChange={e => setConfig(p => p ? { ...p, customInstructions: e.target.value } : null)}
+                value={config.instructions?.systemInstruction || ''}
+                onChange={e => setConfig(p => p ? { 
+                    ...p, 
+                    instructions: { 
+                        ...p.instructions,
+                        systemInstruction: e.target.value 
+                    } 
+                } : null)}
                 rows={18}
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm font-mono"
                 placeholder="Beispiel: Unser Firmenname ist Muster GmbH. Wir sind von 9-17 Uhr erreichbar..."

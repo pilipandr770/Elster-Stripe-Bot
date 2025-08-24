@@ -97,6 +97,13 @@ export const MOCK_SECRETARY_CONFIG: SecretaryConfig = {
       }
     },
   ],
+  googleCalendar: {
+    enabled: false,
+    calendarId: '',
+    authToken: '',
+    allowEventCreation: true,
+    allowEventModification: false
+  },
   knowledgeBaseFiles: [
     { id: 'file1', name: 'produkt-katalog-2024.pdf', size: 2400000, uploaded: '2024-08-01T10:00:00Z', status: 'ready' },
     { id: 'file2', name: 'agb-und-widerrufsbelehrung.docx', size: 85000, uploaded: '2024-08-02T14:30:00Z', status: 'ready' },

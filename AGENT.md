@@ -1,200 +1,132 @@
-# Multiâ€‘Module AI Agent Specification (Elster Business Assistant)
+# MultiModule AI Agent Specification (Elster Business Assistant)
 
-ĞšÑ€Ğ°Ñ‚ĞºĞ¾ (RU): Ğ­Ñ‚Ğ¾Ñ‚ Ğ´Ğ¾ĞºÑƒĞ¼ĞµĞ½Ñ‚ Ğ¾Ğ¿Ğ¸ÑÑ‹Ğ²Ğ°ĞµÑ‚ Ğ°Ñ€Ñ…Ğ¸Ñ‚ĞµĞºÑ‚ÑƒÑ€Ñƒ Ğ¸ Ğ¿Ñ€Ğ°Ğ²Ğ¸Ğ»Ğ° Ñ‡ĞµÑ‚Ñ‹Ñ€Ñ‘Ñ… Ğ¼Ğ¾Ğ´ÑƒĞ»ÑŒĞ½Ñ‹Ñ… Ğ˜Ğ˜â€‘Ğ°Ğ³ĞµĞ½Ñ‚Ğ¾Ğ² (Accounting, Partner Check, Secretary, Marketing) Ğ´Ğ»Ñ SaaSâ€‘Ğ¿Ğ»Ğ°Ñ‚Ñ„Ğ¾Ñ€Ğ¼Ñ‹ Ğ²ĞµĞ´ĞµĞ½Ğ¸Ñ Ğ±Ğ¸Ğ·Ğ½ĞµÑĞ° Ğ² Ğ“ĞµÑ€Ğ¼Ğ°Ğ½Ğ¸Ğ¸. ĞšĞ°Ğ¶Ğ´Ñ‹Ğ¹ Ğ¼Ğ¾Ğ´ÑƒĞ»ÑŒ Ğ¸Ğ¼ĞµĞµÑ‚ ÑĞ¾Ğ±ÑÑ‚Ğ²ĞµĞ½Ğ½ÑƒÑ Ğ¼Ğ¾Ğ´ĞµĞ»ÑŒ/Ğ¿Ñ€Ğ¾Ğ¼Ğ¿Ñ‚/Ğ´Ğ¾ÑÑ‚ÑƒĞ¿ Ğº ÑÑ‚Ñ€Ğ¾Ğ³Ğ¾ Ğ¸Ğ·Ğ¾Ğ»Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ğ½Ğ¾Ğ¹ Ñ‡Ğ°ÑÑ‚Ğ¸ Ğ´Ğ°Ğ½Ğ½Ñ‹Ñ… Ğ² Ğ¾Ğ±Ñ‰ĞµĞ¹ PostgreSQL (multiâ€‘tenant). ĞĞ¸ĞºĞ°ĞºĞ¸Ñ… Ğ¸Ğ½Ğ´Ğ¸Ğ²Ğ¸Ğ´ÑƒĞ°Ğ»ÑŒĞ½Ñ‹Ñ… Ğ½Ğ°Ğ»Ğ¾Ğ³Ğ¾Ğ²Ñ‹Ñ…, ÑÑ€Ğ¸Ğ´Ğ¸Ñ‡ĞµÑĞºĞ¸Ñ… Ğ¸Ğ»Ğ¸ Ñ„Ğ¸Ğ½Ğ°Ğ½ÑĞ¾Ğ²Ñ‹Ñ… ÑĞ¾Ğ²ĞµÑ‚Ğ¾Ğ² â€” Ñ‚Ğ¾Ğ»ÑŒĞºĞ¾ Ğ¾Ğ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ Ğ´Ğ°Ğ½Ğ½Ñ‹Ñ… Ğ¸ Ğ¾Ğ¿ĞµÑ€Ğ°Ñ†Ğ¸Ğ¹ ÑĞ¸ÑÑ‚ĞµĞ¼Ñ‹.
+Êğàòêî (RU): İòîò äîêóìåíò îïèñûâàåò àğõèòåêòóğó è ïğàâèëà ÷åòûğ¸õ ìîäóëüíûõ ÈÈàãåíòîâ (Accounting, Partner Check, Secretary, Marketing) äëÿ SaaSïëàòôîğìû âåäåíèÿ áèçíåñà â Ãåğìàíèè. Êàæäûé ìîäóëü èìååò ñîáñòâåííóş ìîäåëü/ïğîìïò/äîñòóï ê ñòğîãî èçîëèğîâàííîé ÷àñòè äàííûõ â îáùåé PostgreSQL (multitenant). Íèêàêèõ èíäèâèäóàëüíûõ íàëîãîâûõ, şğèäè÷åñêèõ èëè ôèíàíñîâûõ ñîâåòîâ  òîëüêî îïèñàíèå äàííûõ è îïåğàöèé ñèñòåìû.
 
 ---
 
 ## 1. Purpose & Vision
-Provide subscription users an integrated workspace to: (1) automate ELSTER reporting from Stripe inflows, (2) assess counterparties using public EU data, (3) operate an AI powered customer support secretary, (4) plan & schedule marketing content. A unified chat widget dynamically routes to the moduleâ€‘specific agent based on the userâ€™s active module context.
+Provide subscription users an integrated workspace to: (1) automate ELSTER reporting from Stripe inflows, (2) assess counterparties using public EU data, (3) operate an AI powered customer support secretary, (4) plan & schedule marketing content. A unified chat widget dynamically routes to the modulespecific agent based on the user's active module context.
 
-## 2. Highâ€‘Level Architecture
+## 2. HighLevel Architecture
 
 Containers / services:
-1. `postgres` â€“ single database (schemas or rowâ€‘level scoping per tenant + per module tables).
-2. `api-gateway` / backend (FastAPI or Flask) â€“ auth, routing, module orchestration, streaming responses (SSE / chunked JSON lines).
-3. Module logic services (optional split or monolith modules):
-    - `svc-accounting`
-    - `svc-partner-check`
-    - `svc-secretary`
-    - `svc-marketing`
+1. postgres  single database (schemas äëÿ ğàçäåëåíèÿ äàííûõ êàæäîãî ìîäóëÿ).
+2. ackend (Flask)  auth, routing, module orchestration, streaming responses (chunked responses).
+3. Model containers (Docker êîíòåéíåğû ñ ìîäåëÿìè Gemini):
+    - ccounting-model - äëÿ áóõãàëòåğñêîãî ìîäóëÿ, äîñòóï ê accounting schema
+    - partner-check-model - äëÿ ìîäóëÿ ïğîâåğêè êîíòğàãåíòîâ, äîñòóï ê partner_check schema
+    - secretary-model - äëÿ ìîäóëÿ ñåêğåòàğÿ, äîñòóï ê secretary schema
+    - marketing-model - äëÿ ìàğêåòèíãîâîãî ìîäóëÿ, äîñòóï ê marketing schema
 4. Model layer options:
-    - External APIs (OpenAI / Gemini / local models). Abstract via a `ModelProvider` interface; enable feature flags and fallback chain.
-5. Worker / queue (future): asynchronous tasks (ELSTER submission, large partner data enrichment, batch content generation, email sending).
-6. Object storage (future): knowledge base files, marketing media prompts.
+    - Gemini API â äîêåğ-êîíòåéíåğàõ äëÿ îáåñïå÷åíèÿ êîíôèäåíöèàëüíîñòè
+    - OpenAI API äëÿ çàäà÷ êîììóíèêàöèè ñ ïîëüçîâàòåëåì â ñåêğåòàğñêîì ìîäóëå
+    - Ãèáğèäíûé ïîäõîä äëÿ ñåêğåòàğÿ: OpenAI äëÿ îáùåíèÿ, Gemini äëÿ îáğàáîòêè äàííûõ
+5. Worker / queue (future): àñèíõğîííûå çàäà÷è (ELSTER submission, îáîãàùåíèå äàííûõ êîíòğàãåíòîâ, ãåíåğàöèÿ êîíòåíòà).
+6. Object storage (future): ôàéëû áàçû çíàíèé, ìàğêåòèíãîâûå ìåäèà.
 
-Chat delivery: Frontend sends `POST /api/{module}/chat` â†’ backend streams tokens (SSE: `event: token\n data: {...}\n\n`). Single chat widget; module switch resets / forks conversation state.
+Chat delivery: Frontend sends POST /api/{module}/chat  backend streams tokens (chunked responses). Single chat widget; module switch resets / forks conversation state.
 
-## 3. Module Definitions
+## 3. MultiSchema Database Design
 
-### 3.1 Accounting (ELSTER Automation)
-Goal: Reflect Stripe transactions â†’ aggregate â†’ prepare periodical ELSTER submissions metadata (NO actual tax/legal advice).
-Data scope:
-* Tables: `transactions`, `submission_logs`, `accounting_settings`.
-Allowed AI actions:
-* Summaries (period revenue, net vs tax, refunds, VAT collected estimate).
-* Status queries for submissions.
-* Plain language explanation of recorded data + settings.
-Prohibited: personalized tax strategies, legal interpretations, forecasting future tax liabilities.
+Database design follows multi-schema approach in PostgreSQL:
 
-### 3.2 Partner Check
-Goal: Provide factual profile of counterparties using user input identifiers (VAT ID, name, country) + cached public datasets (EU VIES VAT validation, sanctions lists, court notice datasets, credit risk open sources when license permits).
-Data scope:
-* Tables: `counterparties`, `company_profile` (user company), `partner_checks` (query logs), `risk_signals`.
-AI actions: summarize collected open data, highlight risk flags, note last refresh times.
-Prohibited: generating unverifiable accusations, guessing missing legal facts, advising contractual clauses.
+- public  shared tables (users, organizations, subscriptions)
+- ccounting  tax data, ELSTER submissions, Stripe inflow mapping
+- partner_check  supplier validation history, verification data
+- secretary  client communications, calendar, tasks, knowledge base
+- marketing  content plan, post metrics, draft storage
 
-### 3.3 Secretary
-Goal: Omnichannel customer inquiry responder using uploaded docs + channel configs.
-Data scope:
-* Tables: `channels`, `kb_files`, `kb_chunks`, `secretary_config`, `conversation_threads`, `messages`.
-AI actions: answer strictly from knowledge base & prior conversation context, escalate if confidence low, classify intent, draft responses for email / Telegram / Signal / (future) voice.
-Prohibited: inventing company policies not present in KB, handling payment details beyond mask, storing PII beyond required retention.
+Each Docker êîíòåéíåğ ñ ìîäåëüş èìååò äîñòóï ÒÎËÜÊÎ ê ñîîòâåòñòâóşùåé ñõåìå äàííûõ.
 
-### 3.4 Marketing
-Goal: Help plan & generate draft content + schedule posts.
-Data scope:
-* Tables: `marketing_channels`, `content_topics`, `scheduled_posts`, `generated_assets`.
-AI actions: produce title / body / media prompt variants, adapt tone (if provided), schedule suggestions based on simple heuristics (NOT predictive analytics yet).
-Prohibited: claims needing regulatory approval, unverifiable statistics, legal compliance guarantees.
+## 4. Module-specific Agents
 
-## 4. Conversation & Routing Strategy
-Single widget recommended (less UI duplication). Routing key = active module in frontend state. Maintain perâ€‘module conversation state server side (separate thread IDs) so user can return and resume contextually. Frontend: one component; backend: conversation manager storing `module`, `user_id`, `messages[]`.
+### 4.1 Accounting Agent (Steuerbot)
 
-Alternative (deferred): distinct chat panels per module â€“ increases clarity but heavier UI; keep as future A/B.
+**Purpose:** Classify Stripe income for monthly German tax declarations, prepare ELSTER submissions.
 
-## 5. Model Abstraction
-Interface (pseudo):
-```
-generate(module, messages, tools?, tenantCtx) -> stream(tokens)
-```
-Policy order (configurable):
-1. Primary (e.g., OpenAI GPTâ€‘4.1 mini / Gemini) per module.
-2. Fallback (alternate provider) on timeout / quality threshold.
-3. Local model (optional) for privacy / cost fallback when latency budget exceeded.
+**Databases Access:**
+- accounting.stripe_transactions (actual Stripe settlement data)
+- accounting.tax_mappings (user-approved transaction classifications)
+- accounting.client_account_details (business form, tax preferences)
 
-Perâ€‘module system prompt (template):
-* Identity: role + scope boundaries.
-* Data policy: â€œOnly use provided structured data rows â€¦ If answer outside scope â†’ refusal pattern.â€
-* Refusal recipe (see Â§7) with neutral compliance phrasing.
-* Output formatting guidelines (concise bullet summaries, disclaimers where needed).
+**Agent Capabilities:**
+- Analyze Stripe transaction inflows
+- Map transactions to German tax categories  
+- Project likely taxes / suggest set-asides
+- Prepare ELSTER submission XMLs
+- Answer German tax basics as they pertain to specific revenue items
 
-## 6. Data Isolation & Access Control
-Multiâ€‘tenant enforcement layers:
-1. DB schema: `tenant_id` column on all tenant tables, composite primary keys where sensible.
-2. Row Level Security (PostgreSQL RLS) + `SET app.current_tenant` on connection.
-3. Service layer: queries always parameterized by `tenant_id` & `module`.
-4. Vector / embedding store (if used for Secretary KB) partitioned by tenant namespace.
-5. Logging scrubs PII except minimal identifiers.
+### 4.2 Partner Check Agent
 
-No crossâ€‘module data leakage: each module receives only sanitized slice needed for its prompt invocation.
+**Purpose:** Analyze suppliers and partners for due diligence and risk assessment.
 
-## 7. Guardrails & Refusal Policies
-General prohibitions (all modules):
-* No legal / tax / financial advisory (interpretations, optimization strategies, compliance guarantees).
-* No personal data synthesis or deanonymization.
-* No unverified external facts (must cite internal data fields or say it lacks info).
-* No forwardâ€‘looking predictions beyond trivial arithmetic on existing data.
+**Databases Access:**
+- partner_check.eu_suppliers (enriched supplier DB from public EU data)
+- partner_check.risk_checks (evaluations history)
+- partner_check.client_partners (client business relationships)
 
-Refusal template (German â€“ default UI language):
-> "Ich kann dazu keine steuerliche oder rechtliche Beratung geben. Bitte wenden Sie sich an einen qualifizierten Steuerberater. Ich kann jedoch die vorhandenen Daten im System erlÃ¤utern â€“ mÃ¶chten Sie eine Ãœbersicht sehen?"
+**Agent Capabilities:**
+- Analyze company finances and structure
+- Verify VAT and company registration status
+- Assess supplier reliability from public signals
+- Generate standardized due diligence reports
+- Detect potential compliance or business risks
 
-Escalation (Secretary): if confidence < threshold or missing KB citation â†’ propose handoff and tag ticket.
+### 4.3 Secretary Agent
 
-## 8. Compliance, Privacy, Security
-* GDPR: data minimization (store only needed Stripe fields), right to erasure implemented via softâ€‘delete + background purge.
-* Audit log: admin & agent actions (submission generated, file uploaded, post scheduled).
-* Secrets: loaded via env (`OPENAI_API_KEY`, `STRIPE_SECRET_KEY`, etc.) not committed.
-* Transport: all external calls TLS; internal container network isolated.
-* Rate limiting per user & module to prevent prompt abuse.
-* Prompt injection mitigation: sanitize user inputs, delimit structured data, enforce strict refusal rules.
+**Purpose:** Provide intelligent client communication assistance and scheduling.
 
-## 9. Admin Capabilities
-* View tenants, subscription status, usage metrics (tokens, requests per module).
-* Force reindex KB / clear conversations per module.
-* Toggle module availability (feature flags).
-* Inspect (redacted) message logs for abuse (privacy filters applied).
+**Databases Access:**
+- secretary.client_communications (email, messages, templates)
+- secretary.calendar_events (calendar availability, integrations)
+- secretary.tasks (to-dos, follow-ups, deadlines)
+- secretary.knowledge_base (client references and wiki)
 
-## 10. Streaming Protocol
-Preferred: Serverâ€‘Sent Events.
-Event types:
-* `token` â€“ incremental content.
-* `thought` (optional internal debug â€“ disabled in production).
-* `error` â€“ terminal error.
-* `done` â€“ completion.
-Fallback: chunked JSON lines if SSE unsupported.
+**Agent Capabilities:**
+- Draft email responses to customer inquiries
+- Manage schedule and arrange appointments
+- Prepare meeting summaries and follow-ups
+- Organize to-do lists with prioritization
+- Maintain knowledge base of client interactions
+- Google Calendar integrations for scheduling
 
-## 11. Error Handling Contract
-Frontend categories: `NETWORK`, `RATE_LIMIT`, `GUARDRAIL_REFUSAL`, `MODEL_FAILURE`, `VALIDATION`.
-Server JSON error shape:
-```
-{ "error": { "code": "RATE_LIMIT", "message": "...", "retry_after": 5 } }
-```
+### 4.4 Marketing Agent
 
-## 12. Observability
-Metrics (Prometheus): request_count{module}, tokens_out_total{module}, refusal_count{module,reason}, latency_histogram_seconds, model_fallback_count.
-Tracing (OTel): spans around model invocation and DB retrieval.
-Structured logs (JSON) with correlation id.
+**Purpose:** Assist with marketing planning and content creation for client businesses.
 
-## 13. Roadmap Snapshot (Execution Order)
-1. Backend bootstrap (auth skeleton + accounting chat echo + SSE).
-2. Postgres schema & RLS scaffold.
-3. Modular prompt templates & routing layer.
-4. Secretary KB ingestion pipeline (embedding + search).
-5. Partner Check integration (VIES VAT validation + sanctions dataset ingestion job).
-6. Stripe webhook ingestion + accounting aggregation + ELSTER submission stub.
-7. Marketing scheduler (cron / worker) + draft generation.
-8. Admin dashboard metrics + feature flag control.
-9. Hardening: rate limiting, audit, multiâ€‘provider models.
-10. CI/CD pipelines & integration tests.
+**Databases Access:**
+- marketing.content_plan (scheduling, themes, campaigns)
+- marketing.post_metrics (engagement data by platform)
+- marketing.drafts (WIP content pieces)
+- marketing.brand_assets (tone, style guides, keywords)
 
-## 14. Minimal Initial Postgres Tables (Draft)
-```
-tenants(id uuid pk, name, created_at)
-users(id uuid pk, tenant_id fk, email, role, password_hash, subscription_status, last_login_at)
-transactions(id, tenant_id, stripe_id, amount_cents, currency, type, tax_amount_cents, occurred_at, raw jsonb)
-submission_logs(id, tenant_id, period, status, created_at, payload jsonb)
-accounting_settings(tenant_id pk, submission_frequency, vat_id, last_sync_at)
-company_profile(tenant_id pk, name, vat_id, address, country)
-counterparties(id, tenant_id, name, vat_id, country, last_check_at, status, raw jsonb)
-partner_checks(id, tenant_id, counterparty_id fk, query_input jsonb, created_at)
-channels(id, tenant_id, type, value, connected boolean, created_at)
-kb_files(id, tenant_id, file_name, size_bytes, mime, uploaded_at)
-kb_chunks(id, file_id fk, embedding vector, content text)
-conversation_threads(id, tenant_id, module, created_at, updated_at)
-messages(id, thread_id fk, role, content, created_at, token_count)
-marketing_channels(id, tenant_id, platform, url, created_at)
-content_topics(id, tenant_id, topic, created_at)
-scheduled_posts(id, tenant_id, channel_id fk, topic_id fk, scheduled_at, status, generated jsonb)
-generated_assets(id, tenant_id, post_id fk, variant, content jsonb)
-```
+**Agent Capabilities:**
+- Generate social media content ideas
+- Plan content calendar with scheduling
+- Draft posts with SEO / CRM awareness
+- Analyze engagement metrics patterns
+- Suggest A/B testing variants for posts
+- Integrate branding guidelines into content
 
-## 15. Security Checklist (MVP)
-* Hash passwords (Argon2 / bcrypt), enforce admin creation via migration.
-* JWT access + refresh rotation; short lived access tokens.
-* RLS policies tested automatically.
-* Input validation: Pydantic / schema layer.
-* File uploads virus scan (future) + size limits.
+## 5. Data Isolation & Privacy Model
 
-## 16. Testing Strategy
-* Unit: prompt builder, model provider adapter, RLS enforcement (SQL tests), VAT ID validator.
-* Integration: chat endpoint streaming, Stripe webhook ingestion, KB retrieval relevance test.
-* Load (later): concurrent chat sessions + rate limiting.
+Each module container is strictly isolated with:
+1. Distinct Docker container for each agent/model
+2. Database schema-level permissions
+3. Conversation context isolation
+4. No cross-module data access
 
-## 17. Open Questions (To Clarify With Product Owner)
-1. Required ELSTER submission formats (UStâ€‘VA, JahreserklÃ¤rung, etc.) priority order.
-2. Minimum partner data sources in first release (only VIES? add sanctions?).
-3. Channels for Secretary MVP (email + Telegram?) vs full set.
-4. Marketing publishing â€” actual API posting in MVP or draft export only?
-5. Target token cost budget per module (to tune model selection / caching).
+Personal user data is never shared outside the Secretary module. Tax and financial data stay within the Accounting module. Marketing data only for Marketing module.
 
-## 18. Refusal Examples
-User: "Soll ich mich fÃ¼r die Kleinunternehmerregelung entscheiden?" â†’ Refusal template.
-User: "Wie viel Umsatzsteuer zahle ich nÃ¤chstes Jahr?" â†’ Refusal + offer historical summary.
-User: "Gib mir die private Adresse des Lieferanten" â†’ Refusal (privacy).
+## 6. Responsible AI Guidelines
 
-## 19. Summary
-This specification defines a modular, secure, complianceâ€‘aware multiâ€‘agent system sharing a unified UX while isolating data and prompts. Next implementation step: scaffold backend + accounting chat stream + perâ€‘module prompt switch.
+All agent modules adhere to:
+1. No individual tax/legal advice - only describing system data and operations
+2. Clear demarcation between factual system data vs agent responses
+3. Human review required for ELSTER submissions
+4. No PII processing outside authorized modules
+5. Alternative non-AI routes for all critical functions
 
 ---
-Change Log:
-v0.2 (multiâ€‘module expansion) â€“ Added 4â€‘module architecture, data isolation model, guardrails, roadmap.
+
+ 2023 ELSTER-STRIPE-BOT SAAS PLATFORM

@@ -4,6 +4,7 @@ import uuid
 from flask import Blueprint, request, Response, stream_with_context, jsonify, g, current_app
 from .utils import jwt_required, get_thread_for_module, save_message
 from ..models import ModuleEnum
+from ..services.marketing_service import get_marketing_response, generate_marketing_content
 from ..services.model_context_manager import generate_module_response
 from ..services.module_data_access import get_data_access_for_module, MarketingDataAccess
 

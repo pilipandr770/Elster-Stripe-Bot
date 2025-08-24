@@ -10,6 +10,7 @@ services:
       - "5433:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - ./database/init-schemas.sql:/docker-entrypoint-initdb.d/init-schemas.sql
 
   backend:
     build: ./backend
@@ -17,6 +18,10 @@ services:
     env_file: .env
     depends_on:
       - postgres
+      - accounting-model
+      - partner-check-model
+      - secretary-model
+      - marketing-model
     ports:
       - "5000:5000"
     environment:
@@ -25,6 +30,67 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       ENV: development
       LOG_LEVEL: ${LOG_LEVEL:-info}
+      ACCOUNTING_MODEL_URL: http://accounting-model:8000
+      PARTNER_CHECK_MODEL_URL: http://partner-check-model:8000
+      SECRETARY_MODEL_URL: http://secretary-model:8000
+      MARKETING_MODEL_URL: http://marketing-model:8000
+
+  # Специализированные контейнеры для моделей Gemini
+  accounting-model:
+    build:
+      context: ./model-containers
+      dockerfile: Dockerfile.gemini
+    volumes:
+      - ./model-containers/accounting:/app
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      MODEL_TYPE: accounting
+      DB_SCHEMA: accounting
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "8001:8000"
+  
+  partner-check-model:
+    build:
+      context: ./model-containers
+      dockerfile: Dockerfile.gemini
+    volumes:
+      - ./model-containers/partner-check:/app
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      MODEL_TYPE: partner_check
+      DB_SCHEMA: partner_check
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "8002:8000"
+  
+  secretary-model:
+    build:
+      context: ./model-containers
+      dockerfile: Dockerfile.gemini
+    volumes:
+      - ./model-containers/secretary:/app
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      MODEL_TYPE: secretary
+      DB_SCHEMA: secretary
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "8003:8000"
+  
+  marketing-model:
+    build:
+      context: ./model-containers
+      dockerfile: Dockerfile.gemini
+    volumes:
+      - ./model-containers/marketing:/app
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      MODEL_TYPE: marketing
+      DB_SCHEMA: marketing
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "8004:8000"
 
 volumes:
   pg_data:

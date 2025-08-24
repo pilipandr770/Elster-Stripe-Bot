@@ -5,6 +5,7 @@ from flask import Blueprint, request, Response, stream_with_context, jsonify, g,
 from .utils import jwt_required, get_thread_for_module, save_message
 from ..models import ModuleEnum
 from ..services.counterparty_check import CounterpartyCheckService
+from ..services.partner_check_service import get_partner_check_response
 from ..prompts import PARTNER_CHECK_SYSTEM_PROMPT
 
 partner_check_bp = Blueprint("partner_check", __name__)

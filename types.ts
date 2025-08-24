@@ -118,11 +118,20 @@ export interface SecretaryInstructions {
   faqResponses: Array<{ question: string; answer: string }>;
 }
 
+export interface GoogleCalendarConfig {
+  enabled: boolean;
+  calendarId: string;
+  authToken: string;
+  allowEventCreation: boolean;
+  allowEventModification: boolean;
+}
+
 export interface SecretaryConfig {
   isActive: boolean;
   channels: SecretaryChannel[];
   knowledgeBaseFiles: KnowledgeBaseFile[];
   instructions: SecretaryInstructions;
+  googleCalendar: GoogleCalendarConfig;
   memorySettings: {
     enableConversationMemory: boolean;
     maxHistoryMessages: number;
