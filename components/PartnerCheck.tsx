@@ -3,6 +3,7 @@ import Button from './Button';
 import Input from './Input';
 import { MOCK_USER_PROFILE, MOCK_COUNTERPARTIES } from '../constants';
 import { UserProfile, Counterparty } from '../types';
+import BackButton from './BackButton';
 
 interface PartnerCheckProps {
   onBack: () => void;
@@ -23,6 +24,15 @@ const PartnerCheck: React.FC<PartnerCheckProps> = ({ onBack }) => {
   const [isChecking, setIsChecking] = useState(false);
   const [checkResult, setCheckResult] = useState<Counterparty | null>(null);
   const [history, setHistory] = useState<Counterparty[]>(MOCK_COUNTERPARTIES);
+  
+  useEffect(() => {
+    // Добавляем обработку кнопки "назад" в браузере
+    const handleBackButton = (e: PopStateEvent) => {
+      onBack();
+    };
+    window.addEventListener('popstate', handleBackButton);
+    return () => window.removeEventListener('popstate', handleBackButton);
+  }, [onBack]);
 
   const handleProfileSave = (profileData: UserProfile) => {
     // In a real app, this would be an API call
@@ -101,6 +111,9 @@ const PartnerCheck: React.FC<PartnerCheckProps> = ({ onBack }) => {
 
   return (
     <div className="animate-fade-in space-y-8">
+      <div className="mb-4">
+        <BackButton onClick={onBack} />
+      </div>
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">Partnerprüfung (Due Diligence)</h2>
         <Button onClick={onBack} variant="secondary">Zurück zur Modulauswahl</Button>

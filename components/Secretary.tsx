@@ -7,6 +7,7 @@ import { TelegramIcon } from './icons/TelegramIcon';
 import { WhatsAppIcon } from './icons/WhatsAppIcon';
 import { HeadsetIcon } from './icons/HeadsetIcon';
 import { InfoIcon } from './icons/InfoIcon';
+import BackButton from './BackButton';
 import { getConfig, saveConfig, uploadKnowledgeFile, testChannelConnection } from '../services/secretaryService';
 import { MOCK_SECRETARY_CONFIG } from '../constants'; // Fallback
 import GoogleCalendarSettings from './GoogleCalendarSettings';
@@ -97,6 +98,9 @@ const Secretary: React.FC<SecretaryProps> = ({ onBack }) => {
 
   return (
     <div className="animate-fade-in space-y-8">
+      <div className="mb-4">
+        <BackButton onClick={onBack} />
+      </div>
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">Sekretariat & Kommunikation</h2>
         <div className="flex items-center space-x-2">

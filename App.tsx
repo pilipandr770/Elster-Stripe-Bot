@@ -14,6 +14,7 @@ import Impressum from './components/Impressum';
 import Datenschutz from './components/Datenschutz';
 import AGB from './components/AGB';
 import { detectModuleContext } from './services/contextDetectionService';
+import { AppProvider } from './contexts/AppContext';
 
 // Minimal safe access to Vite env without type declarations
 let ADMIN_EMAIL = 'admin@example.com';
@@ -138,23 +139,25 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 font-sans text-gray-800">
-      <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        {currentUser.role === 'admin' ? (
-          <AdminDashboard admin={currentUser} onLogout={handleLogout} users={MOCK_USERS} />
-        ) : (
-          <UserView 
-            onLogout={handleLogout} 
-            activeModule={activeModule}
-            setActiveModule={setActiveModule}
-          />
-        )}
-      </main>
-      <Footer onShowLegalPage={setLegalView} />
-      {currentUser.role === 'user' && activeModule !== 'selection' && <ChatAssistant module={activeModule} />}
-      {renderLegalPage()}
-    </div>
+    <AppProvider activeModule={activeModule} setActiveModule={setActiveModule}>
+      <div className="flex flex-col min-h-screen bg-gray-50 font-sans text-gray-800">
+        <Header onBackToHome={() => setActiveModule('selection')} showBackButton={activeModule !== 'selection'} />
+        <main className="flex-grow container mx-auto px-4 py-8">
+          {currentUser.role === 'admin' ? (
+            <AdminDashboard admin={currentUser} onLogout={handleLogout} users={MOCK_USERS} />
+          ) : (
+            <UserView 
+              onLogout={handleLogout} 
+              activeModule={activeModule}
+              setActiveModule={setActiveModule}
+            />
+          )}
+        </main>
+        <Footer onShowLegalPage={setLegalView} />
+        {currentUser.role === 'user' && activeModule !== 'selection' && <ChatAssistant module={activeModule} />}
+        {renderLegalPage()}
+      </div>
+    </AppProvider>
   );
 };
 

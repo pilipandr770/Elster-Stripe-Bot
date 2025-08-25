@@ -3,7 +3,6 @@ import logging
 import requests
 import json
 import google.generativeai as genai
-from openai import OpenAI
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -11,17 +10,32 @@ logger = logging.getLogger(__name__)
 
 # Инициализация клиента OpenAI
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-# Принудительно инициализируем только с api_key, убедившись, что нет ненужных параметров
+openai_client = None
+
+# Безопасно импортируем OpenAI и инициализируем клиент
 try:
-    if OPENAI_API_KEY:
-        # Используем только параметр api_key для совместимости с v1.20.0
-        openai_client = OpenAI(api_key=OPENAI_API_KEY)
-    else:
-        logger.warning("OpenAI API key is missing")
-        openai_client = None
-except Exception as e:
-    logger.error(f"Error initializing OpenAI client: {e}")
-    openai_client = None
+    from openai import OpenAI
+    try:
+        if OPENAI_API_KEY:
+            try:
+                # Безопасно создаем клиент только с api_key
+                openai_client = OpenAI(api_key=OPENAI_API_KEY)
+                logger.info("OpenAI client successfully initialized")
+            except Exception as e:
+                # Может быть проблема с версией OpenAI или другими параметрами
+                logger.error(f"Error creating OpenAI client: {e}")
+                logger.error("Continuing without OpenAI client")
+        else:
+            logger.warning("OpenAI API key is missing, OpenAI functionality will not be available")
+    except TypeError as e:
+        logger.error(f"TypeError initializing OpenAI client: {e}")
+        logger.error("Make sure you're using openai v1.20.0 or later")
+    except Exception as e:
+        logger.error(f"Error initializing OpenAI client: {e}")
+        logger.error("Continuing without OpenAI client")
+except ImportError:
+    logger.error("Failed to import OpenAI library. Continuing without OpenAI support.")
+    OpenAI = None
 
 # Инициализация Gemini API
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -108,7 +122,9 @@ class ModelService:
         """Прямой вызов API OpenAI"""
         try:
             if not openai_client:
-                raise ValueError("OpenAI client not configured")
+                logger.warning("OpenAI client not configured, falling back to Gemini")
+                # Если OpenAI недоступен, используем Gemini как запасной вариант
+                return call_gemini_api(prompt)
                 
             # Генерация ответа
             response = openai_client.chat.completions.create(
@@ -123,7 +139,13 @@ class ModelService:
         
         except Exception as e:
             logger.error(f"Error calling OpenAI API: {e}")
-            raise
+            # Если произошла ошибка, используем Gemini как запасной вариант
+            logger.info("Falling back to Gemini API")
+            try:
+                return call_gemini_api(prompt)
+            except Exception as gemini_error:
+                logger.error(f"Gemini fallback also failed: {gemini_error}")
+                raise
     
     @staticmethod
     def call_secretary_specialized_endpoints(endpoint, data):

@@ -6,6 +6,7 @@ from typing import Dict, Any, Optional
 
 # Импортируем общие модули
 import sys
+import os
 sys.path.append("/app")
 from common.database import init_db
 from common.gemini_service import generate_response
@@ -18,8 +19,22 @@ logger = logging.getLogger(__name__)
 # Инициализация базы данных
 init_db()
 
+# Создаем роутер здоровья напрямую
+from fastapi import APIRouter
+
+# Создаем роутер здоровья вместо импорта
+health_router = APIRouter()
+
+@health_router.get("/health")
+async def health_check():
+    """Simple health check endpoint for this module."""
+    return {"status": "healthy", "service": "secretary-model"}
+
 # Создание FastAPI приложения
 app = FastAPI(title="Secretary Module API")
+
+# Регистрируем роутер здоровья
+app.include_router(health_router)
 
 class ChatRequest(BaseModel):
     message: str

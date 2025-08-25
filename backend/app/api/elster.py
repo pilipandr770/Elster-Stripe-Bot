@@ -208,18 +208,15 @@ def submit_declaration():
             session.commit()
             
             return jsonify({
-            "id": submission.id,
-            "timestamp": submission.timestamp.isoformat(),
-            "period": submission.period,
-            "status": submission.status.value,
-            "transactionIds": transaction_ids
-        })
+                "id": submission.id,
+                "timestamp": submission.timestamp.isoformat(),
+                "period": submission.period,
+                "status": submission.status.value,
+                "transactionIds": transaction_ids
+            })
         except Exception as e:
-            session.rollback()
-            return jsonify({
-                "error": f"Failed to submit tax declaration: {str(e)}",
-                "status": "error"
-            }), 500
+            logger.error(f"Error submitting declaration: {str(e)}")
+            return jsonify({"error": str(e)}), 500
 
 
 @elster_bp.get("/frequency")

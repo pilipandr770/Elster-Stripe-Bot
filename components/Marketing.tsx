@@ -10,6 +10,7 @@ import { marketingService } from '../services/marketingService';
 import { TrashIcon } from './icons/TrashIcon';
 import { ChartBarIcon } from './icons/ChartBarIcon';
 import { SparklesIcon } from './icons/SparklesIcon';
+import BackButton from './BackButton';
 
 interface MarketingProps {
   onBack: () => void;
@@ -321,6 +322,9 @@ const Marketing: React.FC<MarketingProps> = ({ onBack }) => {
 
   return (
     <div className="animate-fade-in space-y-8">
+      <div className="mb-4">
+        <BackButton onClick={onBack} />
+      </div>
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">Marketing & Content</h2>
         <Button onClick={onBack} variant="secondary">Zurück zur Modulauswahl</Button>
