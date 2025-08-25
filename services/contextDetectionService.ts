@@ -17,7 +17,7 @@ export function detectModuleContext(): Module | null {
   }
   
   if (url.includes('/partner-check') || url.includes('/compliance')) {
-    return 'partnerCheck';
+    return 'partner_check';
   }
   
   if (url.includes('/secretary') || url.includes('/messages') || url.includes('/emails')) {
@@ -48,7 +48,7 @@ export function detectModuleContext(): Module | null {
     bodyContent.includes('check') || 
     bodyContent.includes('verify')
   ) {
-    return 'partnerCheck';
+    return 'partner_check';
   }
   
   if (
@@ -83,7 +83,7 @@ export function detectModuleContext(): Module | null {
       case 'partnerCheck': 
       case 'partner-check': 
       case 'compliance': 
-        return 'partnerCheck';
+        return 'partner_check';
       
       case 'secretary': 
       case 'messages': 

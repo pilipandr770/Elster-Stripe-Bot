@@ -28,7 +28,7 @@ export function getModuleModelPreference(module: Module): AIModelType {
   // Default preferences if nothing stored
   const defaultPreferences: ModuleModelPreferences = {
     'accounting': 'gemini',
-    'partnerCheck': 'gemini',
+    'partner_check': 'gemini',
     'secretary': 'gemini',
     'marketing': 'gemini'
   };
@@ -66,7 +66,7 @@ function getApiEndpoint(module: Module): string {
     switch (module) {
         case 'accounting':
             return `${backendUrl}/api/accounting/chat`;
-        case 'partnerCheck':
+        case 'partner_check':
             return `${backendUrl}/api/partner_check/chat`;
         case 'secretary':
             return `${backendUrl}/api/secretary/chat`;

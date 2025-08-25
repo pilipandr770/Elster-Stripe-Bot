@@ -39,7 +39,9 @@ def create_app() -> Flask:
     from .api.email_service import mcp_email_bp
     from .api.signal_service import signal_bp
     from .api.livekit_service import livekit_bp
+    from .api.health import health_bp
 
+    app.register_blueprint(health_bp, url_prefix="/api/health")
     app.register_blueprint(accounting_bp, url_prefix="/api/accounting")
     app.register_blueprint(partner_check_bp, url_prefix="/api/partner_check")
     app.register_blueprint(secretary_bp, url_prefix="/api/secretary")

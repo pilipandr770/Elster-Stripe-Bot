@@ -4,7 +4,7 @@ from flask import Blueprint, request, current_app, jsonify
 from sqlalchemy import select
 from ..models import User
 import os
-docker-compose logsimport logging
+import logging
 from ..security import hash_password, verify_password, create_access_token
 
 # Настраиваем логирование

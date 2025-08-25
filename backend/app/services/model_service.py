@@ -42,7 +42,7 @@ class ModelService:
         """Получение URL сервиса модели по названию модуля"""
         if module == "accounting":
             return ACCOUNTING_MODEL_URL
-        elif module == "partnerCheck":
+        elif module == "partner_check":
             return PARTNER_CHECK_MODEL_URL
         elif module == "secretary":
             return SECRETARY_MODEL_URL

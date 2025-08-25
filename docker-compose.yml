@@ -3,13 +3,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - "80:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   postgres:
     image: postgres:16
@@ -23,21 +29,37 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./database/init-schemas.sql:/docker-entrypoint-initdb.d/init-schemas.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: ./backend
-    restart: unless-stopped
+    restart: on-failure
     env_file: .env
     depends_on:
-      - postgres
-      - accounting-model
-      - partner-check-model
-      - secretary-model
-      - marketing-model
+      postgres:
+        condition: service_healthy
+      accounting-model:
+        condition: service_started
+      partner-check-model:
+        condition: service_started
+      secretary-model:
+        condition: service_started
+      marketing-model:
+        condition: service_started
     ports:
       - "5000:5000"
     volumes:
       - ./backend:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     environment:
       DATABASE_URL: ${DATABASE_URL}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
@@ -55,13 +77,22 @@ services:
       context: ./model-containers
       dockerfile: Dockerfile.gemini
     volumes:
-      - ./model-containers/accounting:/app
+      - ./model-containers/accounting/main.py:/app/main.py
       - ./model-containers/common:/app/common
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       MODEL_TYPE: accounting
       DB_SCHEMA: accounting
       DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
     ports:
       - "8001:8000"
   
@@ -70,13 +101,22 @@ services:
       context: ./model-containers
       dockerfile: Dockerfile.gemini
     volumes:
-      - ./model-containers/partner-check:/app
+      - ./model-containers/partner-check/main.py:/app/main.py
       - ./model-containers/common:/app/common
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       MODEL_TYPE: partner_check
       DB_SCHEMA: partner_check
       DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
     ports:
       - "8002:8000"
   
@@ -85,13 +125,22 @@ services:
       context: ./model-containers
       dockerfile: Dockerfile.gemini
     volumes:
-      - ./model-containers/secretary:/app
+      - ./model-containers/secretary/main.py:/app/main.py
       - ./model-containers/common:/app/common
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       MODEL_TYPE: secretary
       DB_SCHEMA: secretary
       DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
     ports:
       - "8003:8000"
   
@@ -100,13 +149,22 @@ services:
       context: ./model-containers
       dockerfile: Dockerfile.gemini
     volumes:
-      - ./model-containers/marketing:/app
+      - ./model-containers/marketing/main.py:/app/main.py
       - ./model-containers/common:/app/common
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       MODEL_TYPE: marketing
       DB_SCHEMA: marketing
       DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
     ports:
       - "8004:8000"
 

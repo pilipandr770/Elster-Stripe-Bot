@@ -23,7 +23,7 @@ def chat_stream():
 	Session = getattr(current_app, "session_factory")
 	with Session() as session:
 		# Get or create conversation thread for this user and module
-		thread = get_thread_for_module(session, g.user_id, ModuleEnum.partnerCheck)
+		thread = get_thread_for_module(session, g.user_id, ModuleEnum.partner_check)
 		
 		# Save user message
 		save_message(session, thread.id, "user", message)

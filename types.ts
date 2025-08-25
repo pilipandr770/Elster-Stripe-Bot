@@ -11,7 +11,7 @@ export interface ChatMessage {
 
 export type SubmissionFrequency = 'immediate' | 'quarterly' | 'annually';
 
-export type Module = 'accounting' | 'partnerCheck' | 'secretary' | 'marketing';
+export type Module = 'accounting' | 'partner_check' | 'secretary' | 'marketing';
 
 export interface Transaction {
   id: string;

@@ -9,6 +9,36 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Копирование общего кода
 COPY common/ /app/common/
 
+# Создаем скрипт запуска прямо в Dockerfile
+RUN echo '#!/bin/sh\n\
+# Ждем доступности базы данных\n\
+python -c "import os, time, psycopg2; \n\
+host=os.environ.get(\"POSTGRES_HOST\", \"postgres\"); \n\
+port=os.environ.get(\"POSTGRES_PORT\", \"5432\"); \n\
+dbname=os.environ.get(\"POSTGRES_DB\", \"app\"); \n\
+user=os.environ.get(\"POSTGRES_USER\", \"postgres\"); \n\
+password=os.environ.get(\"POSTGRES_PASSWORD\", \"postgres\"); \n\
+print(f\"Ожидание запуска базы данных {host}:{port}...\"); \n\
+max_attempts=30; \n\
+for i in range(max_attempts): \n\
+    try: \n\
+        conn = psycopg2.connect(host=host, port=port, dbname=dbname, user=user, password=password); \n\
+        conn.close(); \n\
+        print(\"База данных доступна!\"); \n\
+        break; \n\
+    except Exception as e: \n\
+        print(f\"Попытка {i+1}/{max_attempts}: {e}\"); \n\
+        if i < max_attempts-1: \n\
+            time.sleep(2); \n\
+        else: \n\
+            print(\"Превышено время ожидания базы данных.\"); \n\
+"\n\
+# Запуск сервиса\n\
+exec python -m uvicorn main:app --host 0.0.0.0 --port 8000' > /app/start.sh
+
+# Даем разрешение на выполнение скрипта
+RUN chmod +x /app/start.sh
+
 # Точка входа будет использовать переменную окружения MODEL_TYPE
-# для определения какой модуль запускать
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# для определения какой модуль запускать и сначала проверит соединение с БД
+CMD ["/app/start.sh"]

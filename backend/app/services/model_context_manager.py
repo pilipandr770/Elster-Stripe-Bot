@@ -41,7 +41,7 @@ MODULE_PROMPTS = {
     Answer in the same language the user is using (German or English).
     """,
     
-    ModuleEnum.partnerCheck: """
+    ModuleEnum.partner_check: """
     You are a specialized AI assistant for partner verification and compliance checks.
     You help users with:
     - Verification of business partners 
@@ -95,13 +95,13 @@ class ModelContextManager:
         self.model_configs = {
             "gemini": {
                 ModuleEnum.accounting: {"model": "gemini-pro", "temperature": 0.2},
-                ModuleEnum.partnerCheck: {"model": "gemini-pro", "temperature": 0.1},
+                ModuleEnum.partner_check: {"model": "gemini-pro", "temperature": 0.1},
                 ModuleEnum.secretary: {"model": "gemini-pro", "temperature": 0.4},
                 ModuleEnum.marketing: {"model": "gemini-pro", "temperature": 0.7},
             },
             "openai": {
                 ModuleEnum.accounting: {"model": "gpt-4o", "temperature": 0.2},
-                ModuleEnum.partnerCheck: {"model": "gpt-4o", "temperature": 0.1},
+                ModuleEnum.partner_check: {"model": "gpt-4o", "temperature": 0.1},
                 ModuleEnum.secretary: {"model": "gpt-4o", "temperature": 0.4},
                 ModuleEnum.marketing: {"model": "gpt-4o", "temperature": 0.7},
             }

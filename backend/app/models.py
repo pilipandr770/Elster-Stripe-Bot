@@ -14,7 +14,7 @@ def _uuid() -> str:
 
 class ModuleEnum(str, Enum):
     accounting = "accounting"
-    partnerCheck = "partnerCheck"
+    partner_check = "partner_check"  # Изменено на snake_case для соответствия схеме БД
     secretary = "secretary"
     marketing = "marketing"
     
