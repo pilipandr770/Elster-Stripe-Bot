@@ -4,7 +4,8 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import Flow
 from datetime import datetime
 from app.services.gemini_service import get_gemini_response
-from flask_jwt_extended import jwt_required, get_jwt_identity
+# Используем наш wrapper вместо прямого импорта
+from app.utils.jwt_wrapper import jwt_required, get_jwt_identity
 import os
 import json
 

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auth API Tester</h1>
+    
+    <div>
+        <h2>Register</h2>
+        <div class="form-group">
+            <label for="register-email">Email:</label>
+            <input type="email" id="register-email" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="register-password">Password:</label>
+            <input type="password" id="register-password" placeholder="Enter password">
+        </div>
+        <button id="register-btn">Register</button>
+        <div id="register-result" class="result"></div>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="login-email">Email:</label>
+            <input type="email" id="login-email" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" placeholder="Enter password">
+        </div>
+        <button id="login-btn">Login</button>
+        <div id="login-result" class="result"></div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h2>Test Authenticated Request</h2>
+        <div class="form-group">
+            <label for="test-token">Auth Token:</label>
+            <input type="text" id="test-token" placeholder="Token will be auto-filled after login">
+        </div>
+        <div class="form-group">
+            <label for="test-endpoint">API Endpoint:</label>
+            <input type="text" id="test-endpoint" value="/api/profile" placeholder="API endpoint path">
+        </div>
+        <button id="test-btn">Test API</button>
+        <div id="test-result" class="result"></div>
+    </div>
+
+    <script>
+        // Helper function to make API requests
+        async function apiRequest(endpoint, method = 'GET', data = null, token = null) {
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (token) {
+                options.headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+
+            try {
+                console.log(`Making ${method} request to ${endpoint}`, options);
+                const response = await fetch(endpoint, options);
+                
+                // Get response text
+                const responseText = await response.text();
+                
+                // Try to parse as JSON
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (e) {
+                    responseData = responseText;
+                }
+                
+                return {
+                    status: response.status,
+                    ok: response.ok,
+                    data: responseData,
+                    headers: Object.fromEntries([...response.headers])
+                };
+            } catch (error) {
+                console.error('API request error:', error);
+                return {
+                    status: 0,
+                    ok: false,
+                    error: error.message,
+                    data: null
+                };
+            }
+        }
+
+        // Register functionality
+        document.getElementById('register-btn').addEventListener('click', async () => {
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const resultElement = document.getElementById('register-result');
+            
+            if (!email || !password) {
+                resultElement.textContent = 'Error: Email and password are required';
+                resultElement.className = 'result error';
+                return;
+            }
+            
+            resultElement.textContent = 'Sending request...';
+            resultElement.className = 'result';
+            
+            try {
+                const response = await apiRequest('/api/auth/register', 'POST', { email, password });
+                
+                resultElement.textContent = `Status: ${response.status}\n\n` + 
+                    JSON.stringify(response.data, null, 2);
+                
+                if (response.ok && response.data.token) {
+                    resultElement.className = 'result';
+                    document.getElementById('test-token').value = response.data.token;
+                } else {
+                    resultElement.className = 'result error';
+                }
+            } catch (error) {
+                resultElement.textContent = `Error: ${error.message}`;
+                resultElement.className = 'result error';
+            }
+        });
+
+        // Login functionality
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const resultElement = document.getElementById('login-result');
+            
+            if (!email || !password) {
+                resultElement.textContent = 'Error: Email and password are required';
+                resultElement.className = 'result error';
+                return;
+            }
+            
+            resultElement.textContent = 'Sending request...';
+            resultElement.className = 'result';
+            
+            try {
+                const response = await apiRequest('/api/auth/login', 'POST', { email, password });
+                
+                resultElement.textContent = `Status: ${response.status}\n\n` + 
+                    JSON.stringify(response.data, null, 2);
+                
+                if (response.ok && response.data.token) {
+                    resultElement.className = 'result';
+                    document.getElementById('test-token').value = response.data.token;
+                } else {
+                    resultElement.className = 'result error';
+                }
+            } catch (error) {
+                resultElement.textContent = `Error: ${error.message}`;
+                resultElement.className = 'result error';
+            }
+        });
+
+        // Test authenticated request
+        document.getElementById('test-btn').addEventListener('click', async () => {
+            const token = document.getElementById('test-token').value;
+            const endpoint = document.getElementById('test-endpoint').value;
+            const resultElement = document.getElementById('test-result');
+            
+            if (!token) {
+                resultElement.textContent = 'Error: Auth token is required';
+                resultElement.className = 'result error';
+                return;
+            }
+            
+            resultElement.textContent = 'Sending request...';
+            resultElement.className = 'result';
+            
+            try {
+                const response = await apiRequest(endpoint, 'GET', null, token);
+                
+                resultElement.textContent = `Status: ${response.status}\n\n` + 
+                    JSON.stringify(response.data, null, 2);
+                
+                if (!response.ok) {
+                    resultElement.className = 'result error';
+                } else {
+                    resultElement.className = 'result';
+                }
+            } catch (error) {
+                resultElement.textContent = `Error: ${error.message}`;
+                resultElement.className = 'result error';
+            }
+        });
+    </script>
+</body>
+</html>

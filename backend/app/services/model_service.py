@@ -11,7 +11,17 @@ logger = logging.getLogger(__name__)
 
 # Инициализация клиента OpenAI
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
+# Принудительно инициализируем только с api_key, убедившись, что нет ненужных параметров
+try:
+    if OPENAI_API_KEY:
+        # Используем только параметр api_key для совместимости с v1.20.0
+        openai_client = OpenAI(api_key=OPENAI_API_KEY)
+    else:
+        logger.warning("OpenAI API key is missing")
+        openai_client = None
+except Exception as e:
+    logger.error(f"Error initializing OpenAI client: {e}")
+    openai_client = None
 
 # Инициализация Gemini API
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")

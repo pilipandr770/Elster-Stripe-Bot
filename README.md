@@ -14,10 +14,39 @@ Admin panel: basic mock for viewing users; no real auth or persistence yet.
 
 ## 🛠️ Tech Stack (Prototype Reality)
 Frontend:
-* React + TypeScript + Vite (dev server: `npm run dev`)
+* React + TypeScript + Vite
 * Styling: simple utility classes / inline; Tailwind NOT yet installed (README previously claimed it)
-AI (planned abstraction): OpenAI / Gemini via backend adapter (frontend presently only has a fetch streamer stub in `services/geminiService.ts`).
-Backend: placeholder `backend/` directory (files currently incomplete/corrupted; to be rebuilt as FastAPI or Flask SSE service + Postgres).
+AI (planned abstraction): OpenAI / Gemini via backend adapter (frontend has a fetch streamer in `services/geminiService.ts`).
+Backend: Flask with multiple specialized model containers for different business functions.
+
+## 🚀 Running the Application
+
+### Using Docker (Recommended)
+The entire application can be run using Docker Compose:
+
+```bash
+# Start all services (frontend, backend, database, model containers)
+docker-compose up
+
+# Build and start (if you made changes to the code)
+docker-compose up --build
+```
+
+The application will be available at http://localhost
+
+### Manual Development Setup
+For frontend development:
+```bash
+npm install
+npm run dev
+```
+
+For backend development:
+```bash
+cd backend
+pip install -r requirements.txt
+python run.py
+```
 Database: Planned PostgreSQL (not wired yet).
 
 See architectural spec in `AGENT.md`.

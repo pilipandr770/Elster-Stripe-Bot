@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from ..models import User, Message, Thread, ModuleEnum
+from ..models import User, Message, ConversationThread, ModuleEnum
 
 class ModuleDataAccess:
     """Базовый класс для доступа к данным, специфичным для каждого модуля"""
@@ -12,16 +12,16 @@ class ModuleDataAccess:
     def get_module_thread(self):
         """Получить или создать поток для модуля"""
         thread = (
-            self.session.query(Thread)
+            self.session.query(ConversationThread)
             .filter(
-                Thread.user_id == self.user_id,
-                Thread.module == self.module
+                ConversationThread.user_id == self.user_id,
+                ConversationThread.module == self.module
             )
             .first()
         )
         
         if not thread:
-            thread = Thread(
+            thread = ConversationThread(
                 user_id=self.user_id,
                 module=self.module
             )

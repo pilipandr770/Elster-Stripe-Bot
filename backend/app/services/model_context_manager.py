@@ -13,9 +13,15 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
-if OPENAI_API_KEY:
-    openai_client = OpenAI(api_key=OPENAI_API_KEY)
-else:
+# Принудительно инициализируем только с api_key
+try:
+    if OPENAI_API_KEY:
+        # Используем только параметр api_key для совместимости с v1.20.0
+        openai_client = OpenAI(api_key=OPENAI_API_KEY)
+    else:
+        openai_client = None
+except Exception as e:
+    print(f"Error initializing OpenAI client: {e}")
     openai_client = None
 
 # Базовые промпты для каждого модуля
@@ -35,7 +41,7 @@ MODULE_PROMPTS = {
     Answer in the same language the user is using (German or English).
     """,
     
-    ModuleEnum.partner_check: """
+    ModuleEnum.partnerCheck: """
     You are a specialized AI assistant for partner verification and compliance checks.
     You help users with:
     - Verification of business partners 
@@ -89,13 +95,13 @@ class ModelContextManager:
         self.model_configs = {
             "gemini": {
                 ModuleEnum.accounting: {"model": "gemini-pro", "temperature": 0.2},
-                ModuleEnum.partner_check: {"model": "gemini-pro", "temperature": 0.1},
+                ModuleEnum.partnerCheck: {"model": "gemini-pro", "temperature": 0.1},
                 ModuleEnum.secretary: {"model": "gemini-pro", "temperature": 0.4},
                 ModuleEnum.marketing: {"model": "gemini-pro", "temperature": 0.7},
             },
             "openai": {
                 ModuleEnum.accounting: {"model": "gpt-4o", "temperature": 0.2},
-                ModuleEnum.partner_check: {"model": "gpt-4o", "temperature": 0.1},
+                ModuleEnum.partnerCheck: {"model": "gpt-4o", "temperature": 0.1},
                 ModuleEnum.secretary: {"model": "gpt-4o", "temperature": 0.4},
                 ModuleEnum.marketing: {"model": "gpt-4o", "temperature": 0.7},
             }
